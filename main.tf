@@ -12,11 +12,12 @@ module "listener_rule_home" {
 
 module "ecs_update_monitor" {
   source  = "mergermarket/ecs-update-monitor/acuris"
-  version = "2.0.0"
+  version = "2.0.4"
 
   cluster = var.ecs_cluster
   service = module.service.name
   taskdef = module.taskdef.arn
+  is_test = var.is_test
 }
 
 module "service" {
@@ -77,7 +78,6 @@ module "service_container_definition" {
     env                = var.env
     team               = var.release["team"]
     version            = var.release["version"]
-    "logentries.token" = var.logentries_token
   }
 }
 
@@ -90,4 +90,3 @@ resource "aws_cloudwatch_log_group" "stderr" {
   name              = "${var.env}-${var.release["component"]}${var.name_suffix}-stderr"
   retention_in_days = "7"
 }
-
