@@ -6,22 +6,23 @@ module "listener_rule_home" {
   target_group_arn = module.service.target_group_arn
 
   host_condition    = var.host_condition
-  path_conditions   = [var.path_conditions]
+  path_conditions   = var.path_conditions
   starting_priority = var.alb_listener_rule_priority
 }
 
 module "ecs_update_monitor" {
   source  = "mergermarket/ecs-update-monitor/acuris"
-  version = "2.0.0"
+  version = "2.0.4"
 
   cluster = var.ecs_cluster
   service = module.service.name
   taskdef = module.taskdef.arn
+  is_test = var.is_test
 }
 
 module "service" {
   source  = "mergermarket/load-balanced-ecs-service/acuris"
-  version = "2.0.0"
+  version = "2.0.1"
 
   name                             = "${var.env}-${var.release["component"]}${var.name_suffix}"
   cluster                          = var.ecs_cluster
@@ -73,11 +74,10 @@ module "service_container_definition" {
   )
 
   labels = {
-    component          = var.release["component"]
-    env                = var.env
-    team               = var.release["team"]
-    version            = var.release["version"]
-    "logentries.token" = var.logentries_token
+    component = var.release["component"]
+    env       = var.env
+    team      = var.release["team"]
+    version   = var.release["version"]
   }
 }
 
@@ -90,4 +90,3 @@ resource "aws_cloudwatch_log_group" "stderr" {
   name              = "${var.env}-${var.release["component"]}${var.name_suffix}-stderr"
   retention_in_days = "7"
 }
-

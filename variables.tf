@@ -93,12 +93,6 @@ variable "name_suffix" {
   default     = ""
 }
 
-variable "logentries_token" {
-  description = "The Logentries token used to be able to get logs sent to a specific log set."
-  type        = string
-  default     = ""
-}
-
 variable "health_check_interval" {
   description = "The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds."
   type        = string
@@ -135,3 +129,7 @@ variable "health_check_matcher" {
   default     = "200-299"
 }
 
+variable "is_test" {
+  description = "For testing only. Stops the call to AWS for sts"
+  default     = false
+}
