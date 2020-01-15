@@ -6,7 +6,7 @@ module "listener_rule_home" {
   target_group_arn = module.service.target_group_arn
 
   host_condition    = var.host_condition
-  path_conditions   = [var.path_conditions]
+  path_conditions   = var.path_conditions
   starting_priority = var.alb_listener_rule_priority
 }
 
@@ -22,7 +22,7 @@ module "ecs_update_monitor" {
 
 module "service" {
   source  = "mergermarket/load-balanced-ecs-service/acuris"
-  version = "2.0.0"
+  version = "2.0.1"
 
   name                             = "${var.env}-${var.release["component"]}${var.name_suffix}"
   cluster                          = var.ecs_cluster
@@ -74,10 +74,10 @@ module "service_container_definition" {
   )
 
   labels = {
-    component          = var.release["component"]
-    env                = var.env
-    team               = var.release["team"]
-    version            = var.release["version"]
+    component = var.release["component"]
+    env       = var.env
+    team      = var.release["team"]
+    version   = var.release["version"]
   }
 }
 
